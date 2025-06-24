@@ -23,39 +23,30 @@ public class UserDAO {
             session.save(user);
             tx.commit();
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            ex.printStackTrace();
         }
         return false;
     }
 
     public User getUserByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            return session
-                    .createQuery("FROM User WHERE username = :username", User.class)
-                    .setParameter("username", username)
+            return session.createQuery(
+                            "FROM User WHERE username = :u", User.class)
+                    .setParameter("u", username)
                     .uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
     }
 
-    public User login(String username, String rawPassword) {
-        User user = getUserByUsername(username);
-        if (user != null && BCrypt.checkpw(rawPassword, user.getPassword())) {
-            return user;
-        }
-        return null;
+    public User login(String username, String rawPwd) {
+        User u = getUserByUsername(username);
+        return (u != null && BCrypt.checkpw(rawPwd, u.getPassword())) ? u : null;
     }
 
     public List<User> getAllUsers() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM User", User.class).list();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return null;
     }
 }

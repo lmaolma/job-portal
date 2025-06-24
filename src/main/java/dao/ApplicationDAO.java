@@ -2,52 +2,28 @@ package dao;
 
 import model.Application;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import util.HibernateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public class ApplicationDAO {
 
-    // ✅ Nộp đơn ứng tuyển
-    public static boolean apply(Application application) {
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    public boolean apply(Application app) {
         Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
-            session.save(application);
+            session.save(app);
             tx.commit();
             return true;
-        } catch (Exception e) {
+        } catch (Exception ex) {
             if (tx != null) tx.rollback();
-            e.printStackTrace();
+            ex.printStackTrace();
         }
         return false;
-    }
-
-    // ✅ Kiểm tra xem user đã apply job chưa
-    public static boolean hasApplied(int userId, int jobId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            String hql = "FROM Application WHERE userId = :uid AND jobId = :jid";
-            Application app = session.createQuery(hql, Application.class)
-                    .setParameter("uid", userId)
-                    .setParameter("jid", jobId)
-                    .uniqueResult();
-            return app != null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // ✅ (Tuỳ chọn) Lấy tất cả applications của 1 user
-    public static List<Application> getApplicationsByUser(int userId) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Application WHERE userId = :uid", Application.class)
-                    .setParameter("uid", userId)
-                    .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
