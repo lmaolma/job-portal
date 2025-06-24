@@ -1,9 +1,12 @@
 package servlet;
 
-import dao.ApplicationDAO;
 import model.Application;
 import model.User;
+import service.ApplicationService;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -12,26 +15,32 @@ import java.io.IOException;
 @WebServlet("/applyjob")
 public class ApplyJobServlet extends HttpServlet {
 
+    private ApplicationService applicationService;
+
+    @Override
+    public void init() throws ServletException {
+        ServletContext context = getServletContext();
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+        applicationService = springContext.getBean(ApplicationService.class);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // ✅ Kiểm tra quyền
         User user = (User) request.getSession().getAttribute("user");
         if (user == null || !"user".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        // Lấy ID công việc từ form
         int jobId = Integer.parseInt(request.getParameter("jobId"));
 
-        // ✅ Tạo đối tượng Application (Hibernate Entity)
         Application app = new Application();
         app.setUserId(user.getId());
         app.setJobId(jobId);
 
-        // ✅ Gọi DAO để lưu với Hibernate
-        boolean applied = ApplicationDAO.apply(app);
+        boolean applied = applicationService.apply(app);
 
         if (applied) {
             response.sendRedirect("applySuccess.jsp");

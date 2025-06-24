@@ -19,14 +19,15 @@
   </properties>
 
   <dependencies>
-    <!-- MySQL JDBC Driver -->
+
+    <!-- ✅ JDBC Driver for MySQL -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>8.0.33</version>
     </dependency>
 
-    <!-- Servlet API -->
+    <!-- ✅ Servlet & JSP -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
@@ -34,29 +35,41 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- JSTL -->
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
 
-    <!-- BCrypt -->
+    <!-- ✅ Spring Core -->
     <dependency>
-      <groupId>org.mindrot</groupId>
-      <artifactId>jbcrypt</artifactId>
-      <version>0.4</version>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>5.3.32</version>
     </dependency>
 
-    <!-- JUnit -->
+    <!-- ✅ Spring MVC -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <scope>test</scope>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>5.3.32</version>
     </dependency>
 
-    <!-- ✅ Hibernate -->
+    <!-- ✅ Spring Transaction (dùng @Transactional) -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>5.3.32</version>
+    </dependency>
+
+    <!-- ✅ Spring ORM (Hibernate integration) -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>5.3.32</version>
+    </dependency>
+
+    <!-- ✅ Hibernate Core -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
@@ -69,43 +82,33 @@
       <version>2.2</version>
     </dependency>
 
+    <!-- ✅ Hibernate Validator (optional) -->
     <dependency>
       <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
       <version>6.2.5.Final</version>
     </dependency>
 
-    <!-- ✅ Spring Framework -->
+    <!-- ✅ BCrypt Password Hashing -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>5.3.32</version>
+      <groupId>org.mindrot</groupId>
+      <artifactId>jbcrypt</artifactId>
+      <version>0.4</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>5.3.32</version>
-    </dependency>
-
+    <!-- ✅ Logging (used by Spring internally) -->
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.2</version>
     </dependency>
 
-    <!-- ✅ Thêm để dùng @Transactional -->
+    <!-- ✅ JUnit (for unit testing) -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-tx</artifactId>
-      <version>5.3.32</version>
-    </dependency>
-
-    <!-- ✅ Thêm để tích hợp Spring + Hibernate -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-orm</artifactId>
-      <version>5.3.32</version>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.1</version>
+      <scope>test</scope>
     </dependency>
 
   </dependencies>
