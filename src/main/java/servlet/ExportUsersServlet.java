@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/export-users")
+
 public class ExportUsersServlet extends HttpServlet {
 
     private UserService userService;

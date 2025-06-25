@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 
-@WebServlet("/upload-jobs")
+
 @MultipartConfig
 public class UploadJobsServlet extends HttpServlet {
 

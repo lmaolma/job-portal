@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/postjob")
+
 public class PostJobServlet extends HttpServlet {
 
     private JobService jobService;
@@ -22,7 +22,7 @@ public class PostJobServlet extends HttpServlet {
         ServletContext ctx = getServletContext();
         WebApplicationContext springCtx =
                 WebApplicationContextUtils.getRequiredWebApplicationContext(ctx);
-        jobService = springCtx.getBean(JobService.class);
+        jobService = springCtx.getBean(JobService.class); // ✅ lấy JobService từ Spring
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PostJobServlet extends HttpServlet {
 
         Job job = new Job(title, company, location, description, user.getId());
 
-        boolean success = jobService.postJob(job);
+        boolean success = jobService.postJob(job);  // ✅ gọi service thay vì DAO
 
         if (success) {
             response.sendRedirect("dashboard.jsp");

@@ -3,23 +3,23 @@
         version="4.0"
         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                            http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
 
     <display-name>Job Portal WebApp</display-name>
 
-    <!-- ✅ Kích hoạt Spring IoC container -->
+    <!-- =========== Spring ContextLoaderListener =========== -->
     <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        <listener-class>
+            org.springframework.web.context.ContextLoaderListener
+        </listener-class>
     </listener>
-
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
 
-    <!-- ✅ Mapping các servlet thủ công nếu bạn KHÔNG dùng @WebServlet -->
-    <!-- Nếu bạn DÙNG @WebServlet thì có thể xoá phần này -->
-
+    <!-- =========== Auth =================================== -->
     <servlet>
         <servlet-name>RegisterServlet</servlet-name>
         <servlet-class>servlet.RegisterServlet</servlet-class>
@@ -38,14 +38,65 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
-    <!-- Các servlet khác nếu cần thêm -->
-    <!-- ... -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>servlet.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
 
-    <!-- ✅ Trang mặc định -->
+    <!-- =========== Jobs =================================== -->
+    <servlet>
+        <servlet-name>PostJobServlet</servlet-name>
+        <servlet-class>servlet.PostJobServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PostJobServlet</servlet-name>
+        <url-pattern>/postjob</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ViewJobsServlet</servlet-name>
+        <servlet-class>servlet.ViewJobsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewJobsServlet</servlet-name>
+        <url-pattern>/viewjobs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SearchJobServlet</servlet-name>
+        <servlet-class>servlet.SearchJobServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchJobServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <!-- =========== Import / Export ======================== -->
+    <servlet>
+        <servlet-name>ImportJobsServlet</servlet-name>
+        <servlet-class>servlet.ImportJobsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ImportJobsServlet</servlet-name>
+        <url-pattern>/import-jobs</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ExportJobsServlet</servlet-name>
+        <servlet-class>servlet.ExportJobsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExportJobsServlet</servlet-name>
+        <url-pattern>/export-jobs</url-pattern>
+    </servlet-mapping>
+
+    <!-- =========== Welcome files ========================== -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
-        <welcome-file>register.jsp</welcome-file>
-        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
 </web-app>

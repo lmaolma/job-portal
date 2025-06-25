@@ -13,7 +13,7 @@ import javax.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/login")
+
 public class LoginServlet extends HttpServlet {
 
 

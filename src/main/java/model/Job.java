@@ -52,4 +52,5 @@ public class Job {
 
     public int getPostedBy() { return postedBy; }
     public void setPostedBy(int postedBy) { this.postedBy = postedBy; }
+
 }

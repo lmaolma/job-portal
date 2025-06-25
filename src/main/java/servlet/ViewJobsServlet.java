@@ -5,13 +5,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import service.JobService;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/viewjobs")
 public class ViewJobsServlet extends HttpServlet {
 
     private JobService jobService;
@@ -25,12 +24,24 @@ public class ViewJobsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        List<Job> jobs = jobService.getAllJobs(); // ✅ dùng service thay vì DAO trực tiếp
-        request.setAttribute("jobs", jobs);
-        RequestDispatcher rd = request.getRequestDispatcher("viewJobs.jsp");
-        rd.forward(request, response);
+        // ➜ recruiter: chỉ lấy job do chính họ đăng
+        HttpSession session = req.getSession(false);
+        List<Job> jobs;
+        if (session != null &&
+                session.getAttribute("user") != null &&
+                "recruiter".equalsIgnoreCase(((model.User) session.getAttribute("user")).getRole())) {
+
+            int ownerId = ((model.User) session.getAttribute("user")).getId();
+            jobs = jobService.searchByOwner(ownerId);   // bạn thêm hàm này trong JobService/JobDAO
+        } else {
+            // user hoặc admin → lấy tất cả
+            jobs = jobService.getAll();
+        }
+
+        req.setAttribute("jobs", jobs);
+        req.getRequestDispatcher("viewJobs.jsp").forward(req, resp);
     }
 }

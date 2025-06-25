@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="model.User" %>
 <!DOCTYPE html>
 <html>
@@ -56,61 +57,39 @@
 
     <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#"><span class="job">JOB</span><span class="tracker">Tracker</span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
+        ...
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
 
-                <%
-                    User user = (User) session.getAttribute("user");
-                    if (user == null) {
-                %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.jsp">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="login.jsp">Login</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="register.jsp">Register</a>
-                </li>
-                <% } else { %>
-                <li class="nav-item nav-welcome">
-                    Welcome, <strong><%= user.getUsername() %></strong>
-                </li>
+                <c:choose>
+                    <c:when test="${sessionScope.user == null}">
+                        <li class="nav-item active"><a class="nav-link" href="index.jsp">Home</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="login.jsp">Login</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="register.jsp">Register</a></li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="nav-item nav-welcome">
+                            Welcome, <strong>${sessionScope.user.username}</strong>
+                        </li>
 
-                <%-- Phân quyền menu theo role --%>
-                <% if ("admin".equalsIgnoreCase(user.getRole())) { %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="admin-dashboard.jsp">Admin Panel</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="viewJobs.jsp">All Jobs</a>
-                </li>
-                <% } else if ("recruiter".equalsIgnoreCase(user.getRole())) { %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="postJob.jsp">Post Job</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="viewJobs.jsp">My Jobs</a>
-                </li>
-                <% } else if ("user".equalsIgnoreCase(user.getRole())) { %>
-                <li class="nav-item active">
-                    <a class="nav-link" href="dashboard.jsp">Dashboard</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="viewJobs.jsp">Browse Jobs</a>
-                </li>
-                <% } %>
+                        <c:choose>
+                            <c:when test="${sessionScope.user.role == 'admin'}">
+                                <li class="nav-item active"><a class="nav-link" href="admin-dashboard.jsp">Admin Panel</a></li>
+                                <li class="nav-item active"><a class="nav-link" href="viewJobs.jsp">All Jobs</a></li>
+                            </c:when>
+                            <c:when test="${sessionScope.user.role == 'recruiter'}">
+                                <li class="nav-item active"><a class="nav-link" href="postJob.jsp">Post Job</a></li>
+                                <li class="nav-item active"><a class="nav-link" href="viewJobs.jsp">My Jobs</a></li>
+                            </c:when>
+                            <c:when test="${sessionScope.user.role == 'user'}">
+                                <li class="nav-item active"><a class="nav-link" href="dashboard.jsp">Dashboard</a></li>
+                                <li class="nav-item active"><a class="nav-link" href="viewJobs.jsp">Browse Jobs</a></li>
+                            </c:when>
+                        </c:choose>
 
-                <li class="nav-item active">
-                    <a class="nav-link" href="logout">Logout</a>
-                </li>
-                <% } %>
+                        <li class="nav-item active"><a class="nav-link" href="logout">Logout</a></li>
+                    </c:otherwise>
+                </c:choose>
 
             </ul>
         </div>

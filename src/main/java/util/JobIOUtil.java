@@ -7,62 +7,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Tiện ích IO cho Job: chỉ xử lý CSV <‐> List&lt;Job&gt;
- * - KHÔNG thao tác DB tại đây (mọi thao tác DB sẽ do JobService xử lý).
+ * Chỉ còn nhiệm vụ IO – KHÔNG chạm vào DAO / Hibernate
  */
 public class JobIOUtil {
 
-    /* ─────────────── EXPORT ─────────────── */
-
-    /** Ghi danh sách Job ra file CSV */
-    public static void writeJobsToFile(List<Job> jobs, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            for (Job job : jobs) {
-                writer.write(job.getTitle()       + "," +
-                        job.getCompany()     + "," +
-                        job.getLocation()    + "," +
-                        job.getDescription().replace(",", " "));
-                writer.newLine();
+    /* Ghi ra CSV ----------------------------------------------------------- */
+    public static void writeJobsToFile(List<Job> jobs, String path) {
+        try (BufferedWriter w = new BufferedWriter(new FileWriter(path))) {
+            for (Job j : jobs) {
+                w.write(String.join(",",
+                        j.getTitle(),
+                        j.getCompany(),
+                        j.getLocation(),
+                        j.getDescription().replace(",", " ")));
+                w.newLine();
             }
-        } catch (IOException e) {
-            // TODO: thay bằng logger phù hợp (SLF4J, Log4j…)
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
-    /* ─────────────── IMPORT ─────────────── */
-
-    /** Đọc file CSV và trả về danh sách Job (không lưu DB ở đây) */
-    public static List<Job> parseJobsFromFile(String filePath) {
-        List<Job> jobs = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+    /* Đọc CSV & trả về List<Job> ------------------------------------------ */
+    public static List<Job> parseJobsFromFile(String path) {
+        List<Job> list = new ArrayList<>();
+        try (BufferedReader r = new BufferedReader(new FileReader(path))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length < 4) continue;      // Bỏ dòng lỗi định dạng
-
-                Job job = new Job();
-                job.setTitle(parts[0].trim());
-                job.setCompany(parts[1].trim());
-                job.setLocation(parts[2].trim());
-                job.setDescription(parts[3].trim());
-
-                jobs.add(job);
+            while ((line = r.readLine()) != null) {
+                String[] p = line.split(",");
+                if (p.length < 4) continue;
+                Job j = new Job();
+                j.setTitle(p[0].trim());
+                j.setCompany(p[1].trim());
+                j.setLocation(p[2].trim());
+                j.setDescription(p[3].trim());
+                list.add(j);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return jobs;
-    }
-
-    /**
-     * Hàm cũ import thẳng vào DB đã bị loại bỏ để tuân thủ kiến trúc.
-     * Hãy dùng: JobService.importJobsFromCSV().
-     */
-    @Deprecated
-    public static void importJobsFromFile(String filePath) {
-        throw new UnsupportedOperationException(
-                "Đã chuyển logic import sang JobService.importJobsFromCSV(filePath)");
+        } catch (IOException e) { e.printStackTrace(); }
+        return list;
     }
 }

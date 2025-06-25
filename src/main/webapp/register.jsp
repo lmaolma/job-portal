@@ -33,6 +33,7 @@
     <label>Role:</label><br/>
     <select name="role">
         <option value="user" selected>User</option>
+        <option value="recruiter">Recruiter</option>
         <option value="admin">Admin</option>
     </select><br/><br/>
 

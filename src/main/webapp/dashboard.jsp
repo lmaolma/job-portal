@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="model.User" %>
-<jsp:include page="navbar.jsp" />
+
 
 <%
     // Ngăn quay lại sau khi logout

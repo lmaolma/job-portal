@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/applyjob")
+
 public class ApplyJobServlet extends HttpServlet {
 
     private ApplicationService applicationService;
